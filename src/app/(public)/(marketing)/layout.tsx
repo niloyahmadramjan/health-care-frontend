@@ -1,9 +1,15 @@
-import React from 'react'
+import FooterSection from "@/components/layout/public/footer";
+import HeaderSection from "@/components/layout/public/header";
+import React, { ReactNode } from "react";
 
-function layout() {
+function layout({ children }: { children: ReactNode }) {
   return (
-    <div>Public Layout</div>
-  )
+    <div className="flex flex-col min-h-screen">
+      <HeaderSection />
+      <main className="flex-1"> {children}</main>
+      <FooterSection />
+    </div>
+  );
 }
 
-export default layout
+export default layout;
