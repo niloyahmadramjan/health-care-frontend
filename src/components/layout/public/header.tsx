@@ -5,17 +5,16 @@ import { useGetMe, useLogout } from "@/hooks";
 import { useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 
-const routes = [
-  { name: "Home", url: "/" },
-  { name: "About", url: "/about-us" },
-  { name: "Doctors", url: "/doctors" },
-];
-
 function HeaderSection() {
+  const routes = [
+    { name: "Home", url: "/" },
+    { name: "About", url: "/about-us" },
+    { name: "Doctors", url: "/doctors" },
+  ];
   const { data, isLoading } = useGetMe();
 
   const { mutate: logout } = useLogout();
-  const queryClinet = useQueryClient()
+  const queryClinet = useQueryClient();
 
   const handleLogout = () => {
     logout(undefined, {
@@ -25,7 +24,7 @@ function HeaderSection() {
           description: "Logged out successfully",
           type: "success",
         });
-        queryClinet.removeQueries({queryKey: ["user"]})
+        queryClinet.removeQueries({ queryKey: ["user"] });
       },
       onError: () => {
         toast.add({
@@ -62,7 +61,11 @@ function HeaderSection() {
             </Button>
           )}
 
-          {!isLoading && data && <Button onClick={handleLogout}  variant="destructive">Logout</Button>}
+          {!isLoading && data && (
+            <Button onClick={handleLogout} variant="destructive">
+              Logout
+            </Button>
+          )}
         </div>
       </div>
     </header>

@@ -18,3 +18,13 @@ export function getMe() {
     method: "GET",
   });
 }
+
+
+export function googleOAuth(payload: {idToken: string}) {
+  return apiClient("/auth/google", {
+    method: "POST",
+    body: payload
+  });
+}
+
+
