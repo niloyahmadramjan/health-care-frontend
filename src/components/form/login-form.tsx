@@ -2,21 +2,15 @@
 import { useForm } from "@tanstack/react-form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-  FieldSeparator,
-} from "../ui/field";
+import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
 import { loginSchema } from "@/validation/auth.validation";
 import { useState } from "react";
 import { Eye, EyeOffIcon } from "lucide-react";
-import { useGoogleOAuh, useLogin } from "@/hooks";
+import { useLogin } from "@/hooks";
 import { useRouter } from "next/navigation";
 import { toast } from "../ui/toast";
 import { Spinner } from "../ui/spinner";
-import { GoogleLogin } from "@react-oauth/google";
+import GoogleComponent from "../google-login/GoogleComponent";
 
 function LoginForm() {
   const [showPassword, setPassword] = useState(false);
@@ -24,8 +18,6 @@ function LoginForm() {
   const router = useRouter();
 
   const { mutate: login, isPending: loginPending } = useLogin();
-  const { mutate: googleLogin } = useGoogleOAuh();
-
 
   const form = useForm({
     defaultValues: {
@@ -63,43 +55,6 @@ function LoginForm() {
     },
   });
 
-  const handleGoogleSuccess = (credentialResponse: { credential?: string }) => {
-   const idToken = credentialResponse.credential
-   
-    if (!idToken) {
-      toast.add({
-        title: "Google login failed",
-        description: "Oops something went wrong. Please try again",
-        type: "error",
-      });
-      return;
-    }
-     googleLogin({idToken},{
-      onSuccess: ()=>{
-          toast.add({
-        title: "Google logged in successfull",
-        description: "Welcome back",
-        type: "success",
-      });
-      router.push("/")
-      },
-      onError: (error)=>{
-  toast.add({
-        title: "Google login failed",
-        description: error.message || "Oops something went wrong. Please try again",
-        type: "error",
-      });
-      }
-     })
-  };
-
-  const handleGoogleError = () => {
-    toast.add({
-      title: "Google login failed",
-      description: "Oops something went wrong. Please try again",
-      type: "error",
-    });
-  };
   return (
     <div>
       <h2 className="text-3xl text-center">Login to your account</h2>
@@ -182,14 +137,7 @@ function LoginForm() {
           </Button>
         </FieldGroup>
       </form>
-      <FieldSeparator className="mb-2">Or continue with google</FieldSeparator>
-      <GoogleLogin
-        theme="filled_blue"
-        shape="pill"
-        text="continue_with"
-        onSuccess={handleGoogleSuccess}
-        onError={handleGoogleError}
-      />
+      <GoogleComponent/>
     </div>
   );
 }

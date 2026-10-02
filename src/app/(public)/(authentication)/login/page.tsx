@@ -20,7 +20,7 @@ export default function LoginPage() {
       </div>
       <div className="relative hidden bg-muted lg:block">
         <Image
-          src="/login-page-doctor-img.jpg"
+          src="/doctor4.png"
           alt="doctor"
           fill={true}
           className="object-cover dark:brightness-[0.2] dark:grayscale"
