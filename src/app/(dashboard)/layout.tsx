@@ -1,9 +1,11 @@
-import React from 'react'
+import AuthGuard from "@/components/auth/auth-guard";
 
-function GlobalDashboardLayout() {
+function GlobalDashboardLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div>GlobalDashboardLayout</div>
-  )
+    <AuthGuard>
+      {children}
+    </AuthGuard>
+  );
 }
 
-export default GlobalDashboardLayout
+export default GlobalDashboardLayout;
