@@ -14,7 +14,7 @@ import { InputOTP, InputOTPGroup, InputOTPSlot } from "../ui/input-otp";
 import { Field, FieldDescription, FieldError, FieldLabel } from "../ui/field";
 import { useEffect, useState } from "react";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
-import { useVerifyAccount } from "@/hooks";
+import { useVerifyAccount, useVerifyDoctorAccount } from "@/hooks";
 import { toast } from "../ui/toast";
 
 const RESEND_COOLDOWN = 120;
@@ -32,11 +32,9 @@ export default function VerifyAccountForm({
   const [resendTimer, setResendTimer] = useState(RESEND_COOLDOWN);
 
   const { mutate: verifyPatient } = useVerifyAccount();
-//   const { mutate: verifyDoctor } = useVerifyDoctorAccount();
+  const { mutate: verifyDoctor } = useVerifyDoctorAccount();
 
-//   const verify = mode === "doctor" ? verifyDoctor : verifyPatient;
-  const verify = verifyPatient;
-
+  const verify = mode === "doctor" ? verifyDoctor : verifyPatient;
 
   const email = searchParams.get("email") || "";
 
@@ -44,7 +42,7 @@ export default function VerifyAccountForm({
     if (!email) {
       router.push("/");
     }
-  }, [email]);
+  }, [email, router.push]);
 
   useEffect(() => {
     if (resendTimer <= 0) {
@@ -56,7 +54,7 @@ export default function VerifyAccountForm({
     }, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [resendTimer]);
 
   const handleOTP = () => {
     if (otp.length !== 6) {

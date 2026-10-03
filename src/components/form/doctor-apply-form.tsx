@@ -30,11 +30,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
   doctorApplicationSchema,
-  isAcceptedFileSize,
-  isAcceptedFileType,
   MAX_ADDITIONAL_FILES,
   MAX_FILE_SIZE,
-  MAX_FILE_SIZE_BYTES,
 } from "@/validation";
 import { formatFileSize } from "@/utils";
 import { DoctorApplicationData } from "@/types";
@@ -512,6 +509,7 @@ export default function DoctorApplyForm() {
                   <FieldLabel htmlFor="resume-field">Resume</FieldLabel>
                   <div className="flex flex-wrap items-center gap-3">
                     <Button
+                      // biome-ignore lint/a11y/noLabelWithoutControl: <explanation>
                       render={<label htmlFor="resume-field" />}
                       nativeButton={false}
                       variant="outline"
@@ -577,6 +575,7 @@ export default function DoctorApplyForm() {
                   </FieldLabel>
                   <div className="flex flex-wrap items-center gap-3">
                     <Button
+                      // biome-ignore lint/a11y/noLabelWithoutControl: <explanation>
                       render={<label htmlFor="additional-file-field" />}
                       nativeButton={false}
                       variant="outline"
