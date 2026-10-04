@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/toast";
 import { useGetMe, useLogout } from "@/hooks";
+import { UserRole } from "@/types";
 import { useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 
@@ -11,10 +12,19 @@ function HeaderSection() {
     { name: "About", url: "/about-us" },
     { name: "Doctors", url: "/doctors" },
   ];
-  const { data, isLoading } = useGetMe();
 
+  const dashboardRoute : Record<UserRole, string> = {
+    SUPER_ADMIN: "/admin",
+    ADMIN: "/admin",
+    DOCTOR: "/doctor",
+    PATIENT: "/patient",
+  };
+
+  const { data, isLoading } = useGetMe();
   const { mutate: logout } = useLogout();
   const queryClinet = useQueryClient();
+
+  const role: UserRole = !!data?.data && data?.data?.role;
 
   const handleLogout = () => {
     logout(undefined, {
@@ -49,6 +59,7 @@ function HeaderSection() {
               {route.name}
             </Link>
           ))}
+          {role && <Link href={dashboardRoute[role]}> Dashboard</Link>}
         </div>
         <div>
           {!isLoading && !data && (
