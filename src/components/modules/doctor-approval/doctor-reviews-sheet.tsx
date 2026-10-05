@@ -1,17 +1,23 @@
 "use cleint"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 
-function DoctorReviewSheet() {
+interface props {
+  selectedId: string
+  onClose:()=> void
+}
+
+function DoctorReviewSheet({selectedId,onClose}: props) {
   return (
-   <Tabs defaultValue="account" className="w-[400px]">
-  <TabsList>
-    <TabsTrigger value="account">Account</TabsTrigger>
-    <TabsTrigger value="password">Password</TabsTrigger>
-  </TabsList>
-  <TabsContent value="account">Make changes to your account here.</TabsContent>
-  <TabsContent value="password">Change your password here.</TabsContent>
-</Tabs>
+   <Sheet open={!!selectedId} onOpenChange={()=> onClose()}>
+  <SheetContent side="left">
+    <SheetHeader>
+      <SheetTitle>Are you absolutely sure?</SheetTitle>
+      <SheetDescription>This action cannot be undone.</SheetDescription>
+    </SheetHeader>
+    Doctor Id {selectedId}
+  </SheetContent>
+</Sheet>
   )
 }
 

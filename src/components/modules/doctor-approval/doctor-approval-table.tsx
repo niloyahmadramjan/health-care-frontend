@@ -1,4 +1,5 @@
 "use client";
+// biome-ignore assist/source/organizeImports: <explanation>
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -9,10 +10,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useSuspenseGetAllDoctors } from "@/hooks";
-import type { Doctor } from "@/types";
+import type { Doctor, IDoctorParams } from "@/types";
+import type { Dispatch, SetStateAction } from "react";
+interface Props  extends IDoctorParams{
+  handleReview:Dispatch<SetStateAction<string>>
+}
 
-function DoctorApprovalTable() {
-  const { data } = useSuspenseGetAllDoctors();
+function DoctorApprovalTable({handleReview,...params}: Props) {
+  const { data } = useSuspenseGetAllDoctors(params);
   const doctors = data?.data;
   //   console.log(data)
 
@@ -27,6 +32,7 @@ function DoctorApprovalTable() {
             <TableHead className="w-100">Gmail</TableHead>
             <TableHead className="w-100">Phone</TableHead>
             <TableHead className="w-100">experienceYears</TableHead>
+            <TableHead className="w-100">Status</TableHead>
             <TableHead className="text-right">Action</TableHead>
           </TableRow>
         </TableHeader>
@@ -44,8 +50,12 @@ function DoctorApprovalTable() {
               <TableCell className="font-medium">
                 {doctor.experienceYears}
               </TableCell>
+              <TableCell className="font-medium">
+                {doctor.verificationStatus}
+              </TableCell>
               <TableCell className="text-right">
-                <Button variant="outline">Review</Button>
+                <Button onClick={()=> handleReview(doctor.id)} variant="outline">Review</Button>
+                {/* <DoctorReviewSheet/> */}
               </TableCell>
             </TableRow>
           ))}
