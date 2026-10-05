@@ -48,6 +48,7 @@ function DoctorApprovalTabs() {
       </Suspense>
       <DoctorReviewSheet
         selectedId={selectedId}
+        {...queryParams}
         onClose={() => setSelectedId("")}
       />
     </>
