@@ -1,6 +1,5 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/ui/spinner";
 import {
   Table,
   TableBody,
@@ -9,16 +8,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useGetAllDoctors } from "@/hooks";
+import { useSuspenseGetAllDoctors } from "@/hooks";
+import type { Doctor } from "@/types";
 
 function DoctorApprovalTable() {
-  const { data, isPending } = useGetAllDoctors();
-  const doctors = data?.data || [];
-//   console.log(data)
-
-  if(isPending){
-    return <Spinner></Spinner>
-  }
+  const { data } = useSuspenseGetAllDoctors();
+  const doctors = data?.data;
+  //   console.log(data)
 
   return (
     <div className="border-2  rounded-md">
@@ -35,20 +31,24 @@ function DoctorApprovalTable() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {
-            doctors.map((doctor: any)=>(
+          {doctors.map((doctor: Doctor) => (
             <TableRow key={doctor.id}>
-            <TableCell className="font-medium">{doctor.name}</TableCell>
-            <TableCell className="font-medium">{doctor.licenseNumber}</TableCell>
-            <TableCell className="font-medium">{doctor.email} </TableCell>
-            <TableCell className="font-medium">{doctor.contactNumber ? doctor.contactNumber : "--" }</TableCell>
-            <TableCell className="font-medium">{doctor.experienceYears}</TableCell>
-            <TableCell className="text-right">
-              <Button variant="outline">Review</Button>
-            </TableCell>
-          </TableRow>
-            ))
-          }
+              <TableCell className="font-medium">{doctor.name}</TableCell>
+              <TableCell className="font-medium">
+                {doctor.licenseNumber}
+              </TableCell>
+              <TableCell className="font-medium">{doctor.email} </TableCell>
+              <TableCell className="font-medium">
+                {doctor.contactNumber ? doctor.contactNumber : "--"}
+              </TableCell>
+              <TableCell className="font-medium">
+                {doctor.experienceYears}
+              </TableCell>
+              <TableCell className="text-right">
+                <Button variant="outline">Review</Button>
+              </TableCell>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </div>
