@@ -7,8 +7,8 @@ export const adminRoute =  [
     },
 
     {
-      title: "Patients",
-      url: "/admin/patients",
+      title: "Approve Doctor",
+      url: "/admin/approve-doctor",
       items: [
         {
           title: "All Patients",
