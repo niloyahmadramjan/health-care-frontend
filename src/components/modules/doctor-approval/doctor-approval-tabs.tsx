@@ -7,6 +7,7 @@ import DoctorApprovalTableLoading from "./doctor-approval-table-loading";
 import type { DoctorVerificationStatus, IDoctorParams } from "@/types";
 import { Input } from "@/components/ui/input";
 import DoctorReviewSheet from "./doctor-reviews-sheet";
+import { useDebouncesearch } from "@/hooks/debounce.hook";
 
 const verificationStatus: ["ALL" | DoctorVerificationStatus, string][] = [
   ["APPROVED", "Approved"],
@@ -18,18 +19,25 @@ const verificationStatus: ["ALL" | DoctorVerificationStatus, string][] = [
 function DoctorApprovalTabs() {
   const [tab, setTab] = useState<"ALL" | DoctorVerificationStatus>("ALL");
   const [selectedId, setSelectedId] = useState("");
+  const [searchInput, setSearchInput] = useState("");
 
+  const debouncedSearch = useDebouncesearch(searchInput);
   const queryParams: IDoctorParams = {
     page: 1,
     limit: 10,
     ...(tab === "ALL" ? {} : { verificationStatus: tab }),
+    ...(debouncedSearch? {searchTerm: debouncedSearch}: {})
   };
 
   return (
     <>
       <div className="flex flex-col-reverse gap-5 md:flex md:flex-row justify-between p-3">
         <div>
-          <Input type="search" placeholder="search by name or email" />
+          <Input
+            onChange={(e) => setSearchInput(e.target.value)}
+            type="search"
+            placeholder="search by name or email"
+          />
         </div>
         <div>
           <Tabs value={tab} onValueChange={(value) => setTab(value)}>
