@@ -12,11 +12,11 @@ import {
 import { useSuspenseGetAllDoctors } from "@/hooks";
 import type { Doctor, IDoctorParams } from "@/types";
 import type { Dispatch, SetStateAction } from "react";
-interface Props  extends IDoctorParams{
-  handleReview:Dispatch<SetStateAction<string>>
+interface Props extends IDoctorParams {
+  handleReview: Dispatch<SetStateAction<string>>;
 }
 
-function DoctorApprovalTable({handleReview,...params}: Props) {
+function DoctorApprovalTable({ handleReview, ...params }: Props) {
   const { data } = useSuspenseGetAllDoctors(params);
   const doctors = data?.data;
   //   console.log(data)
@@ -54,8 +54,25 @@ function DoctorApprovalTable({handleReview,...params}: Props) {
                 {doctor.verificationStatus}
               </TableCell>
               <TableCell className="text-right">
-                <Button onClick={()=> handleReview(doctor.id)} variant="outline">Review</Button>
-                {/* <DoctorReviewSheet/> */}
+              {
+                doctor.user.emailVerified ? (
+                   <Button
+                  disabled={
+                    doctor.verificationStatus === "APPROVED" ||
+                    doctor.verificationStatus === "REJECTED"
+                  }
+                  onClick={() => handleReview(doctor.id)}
+                  variant="outline"
+                >
+                  Review
+                </Button>
+                ):( <Button
+                  disabled
+                  variant="destructive"
+                >
+                  Email Not Verify
+                </Button>)
+              }
               </TableCell>
             </TableRow>
           ))}

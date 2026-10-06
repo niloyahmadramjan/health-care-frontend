@@ -1,7 +1,17 @@
-
-import { applyAsDoctor, approveDoctor, getAllDoctors, verifyDoctorAccount } from "@/api";
-import { ApproveDoctorPayload, IDoctorParams } from "@/types";
-import { useMutation, useQuery, useSuspenseQuery } from "@tanstack/react-query";
+// biome-ignore assist/source/organizeImports: <explanation>
+import {
+  applyAsDoctor,
+  approveDoctor,
+  getAllDoctors,
+  verifyDoctorAccount,
+} from "@/api";
+import type { IDoctorParams } from "@/types";
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 
 export function useApplyAsDoctor() {
   return useMutation({
@@ -17,20 +27,24 @@ export function useVerifyDoctorAccount() {
 
 export function useGetAllDoctors(params: IDoctorParams) {
   return useQuery({
-    queryKey: ["doctors",params],
-    queryFn: ()=> getAllDoctors(params),
+    queryKey: ["doctors", params],
+    queryFn: () => getAllDoctors(params),
   });
 }
 
 export function useSuspenseGetAllDoctors(params: IDoctorParams) {
   return useSuspenseQuery({
     queryKey: ["doctors", params],
-    queryFn: ()=> getAllDoctors(params),
+    queryFn: () => getAllDoctors(params),
   });
 }
 
 export function useApproveDoctor() {
+  const queryClient = useQueryClient();
   return useMutation({
-    mutationFn:approveDoctor,
+    mutationFn: approveDoctor,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["doctors"] });
+    },
   });
-}   
+}
